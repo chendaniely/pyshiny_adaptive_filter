@@ -1,0 +1,3 @@
+ipykernel
+shiny
+pandas

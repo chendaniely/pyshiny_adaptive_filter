@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pyshiny_adaptive_filter"
+version = "0.1"
+description = 'Shiny for Python module that implments UI components that are aware and adapts to other component selections.'
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Daniel Chen", email = "chendaniely@users.noreply.github.com" },
+]
+
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+
+dependencies = []
+
+[project.urls]
+Documentation = "https://github.com/chendaniely/pyshiny_adaptive_filter#readme"
+Issues = "https://github.com/chendaniely/pyshiny_adaptive_filter/issues"
+Source = "https://github.com/chendaniely/pyshiny_adaptive_filter"
+
+# TODO: these 2 sections may be missing in the pyopensci instructions
+# https://github.com/pypa/hatch/discussions/1051
+[tool.hatch.build]
+include = ['src/pyshiny_adaptive_filter']
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pyshiny_adaptive_filter"]
