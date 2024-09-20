@@ -22,7 +22,6 @@ def filter_ui():
     return ui.output_ui("render_all_filters")
 
 
-# NOTE: the @module.server decorator does change the function signature
 @module.server
 def filter_server(
     input: Inputs,
@@ -30,30 +29,18 @@ def filter_server(
     session: Session,
     df: Callable[[], pd.DataFrame],
     reset_id: str | None = None,
-    override: Dict[str, adaptive_filter.FilterConstructor] = {},
+    override: Dict[str, adaptive_filter.BaseFilter] = {},
 ) -> FilterServerResults:
     @reactive.calc
     def filters_by_colname() -> Dict[str, adaptive_filter.BaseFilter]:
-        # # TODO: move this to app.py is causing an issue
-        # override = {
-        #     # FilterCatNumericSelect
-        #     "id": adaptive_filter.FilterCatNumericSelect(
-        #         df, "filter_id", "id", "id filter", session=session
-        #     ),
-        #     # FilterCatStringCheckbox
-        #     "time": adaptive_filter.FilterCatStringCheckbox(
-        #         df, "filter_time", "time", "time filter", session=session
-        #     ),
-        # }
-
-        # TODO: implement me
         def make_filter_obj(
             colname: str,
-            constructor: adaptive_filter.FilterConstructor,
+            filter: adaptive_filter.BaseFilter,
         ) -> adaptive_filter.BaseFilter:
-            return constructor(
-                df, f"filter_{colname}", colname, colname, session=session
+            filter.finish_init(
+                df, f"filter_{colname}", colname, session=session
             )
+            return filter
 
         filters_by_colname = helpers.filters_by_colname(df, session)
         valid_override = {

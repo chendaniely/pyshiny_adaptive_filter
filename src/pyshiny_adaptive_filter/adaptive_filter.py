@@ -22,40 +22,36 @@ T = TypeVar("T")
 class FilterConstructor(Protocol):
     def __call__(
         self,
-        data: Callable[[], pd.DataFrame] | pd.DataFrame,
-        id: str,
-        column_name: str,
-        label: str | None,
         *,
-        session: Session | None = None,
+        label: str | None = None,
     ) -> BaseFilter: ...
 
 
 class BaseFilter(ABC, Generic[T]):
-    def __init__(
+    def __init__(self, *, label: str | None = None):
+        self.label = label
+
+    def finish_init(
         self,
         data: Callable[[], pd.DataFrame] | pd.DataFrame,
         id: str,
         column_name: str,
-        label: str | None,
         *,
         session: Session | None = None,
     ):
         self.filter_id = id
         self.column_name = column_name
         self.data = data
-        self.last_user_value = None
-        self.label = label
         self.session = require_active_session(session)
+
+        if self.label is None:
+            self.label = self.column_name
+
+        return self
 
     def ui(self) -> ui.Tag: ...
 
-    def matching_rows(self) -> Union["pd.Index[Any]", None]:
-        ...
-        # categorical use an isin() logic
-        # numerics will typically follow some kind of range logic
-        # what about sliders? probably can still use isin? if just matching
-        # dates can follow range or value like numeric
+    def matching_rows(self) -> Union["pd.Index[Any]", None]: ...
 
     # This is a side-effect function
     def narrow_options(self, valid_rows: "pd.Index[Any]") -> None: ...
@@ -63,13 +59,9 @@ class BaseFilter(ABC, Generic[T]):
     def reset(self) -> None:
         print(f"resetting placeholder for {self.column_name}")
 
-    # TODO: don't remember what this was for
-    # need to play back previous sessions
-    # def me_and_others(self): ...
-
     def _get_input_value(
         self,
-    ) -> Iterable[T] | None:  # TODO: check if this is right
+    ) -> Iterable[T] | None:
         input = self.session.input
 
         # Check if the filter_id is in input and retrieve its value,
@@ -80,7 +72,7 @@ class BaseFilter(ABC, Generic[T]):
 
 
 class FilterCatStringSelect(BaseFilter[str]):
-    def ui(self) -> Tag:  # TODO: check if i used Tag correctly
+    def ui(self) -> Tag:
         col_val_unique = cast(
             "pd.Series[str]",
             self.data()[self.column_name].unique(),  # type: ignore
@@ -95,14 +87,9 @@ class FilterCatStringSelect(BaseFilter[str]):
             options={"plugins": ["clear_button"]},
         )
 
-    # NOTE: the user inputs will trigger matching_rows,
-    # but the other filters will track narrow_options
-    # so i want to save the user actions when matching rows is calculated
-    # can use that later when update the component?
-
     def matching_rows(self) -> Union["pd.Index[Any]", None]:
         """Calculates the rows that match the current filter
-        and returns an Index of the .atching rows
+        and returns an Index of the .matching rows
         """
         input_value = self._get_input_value()
 
@@ -114,7 +101,7 @@ class FilterCatStringSelect(BaseFilter[str]):
         rtn: "pd.Index[Any]" = return_index(
             self.data().loc[self.data()[self.column_name].isin(input_value)]
         )
-        self.last_user_value = rtn
+
         return rtn
 
     def narrow_options(self, valid_rows: "pd.Index[Any]") -> None:
@@ -161,7 +148,7 @@ class FilterCatNumericSelect(BaseFilter[str]):
 
     def ui(self) -> Tag:
         col_val_unique: pd.Series[str] = self.data()[self.column_name].unique()
-        choices: List[int] = pd.to_numeric(col_val_unique).tolist()
+        choices: List[str] = pd.to_numeric(col_val_unique).tolist()
 
         return ui.input_selectize(
             id=self.filter_id,

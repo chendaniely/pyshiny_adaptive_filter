@@ -10,6 +10,9 @@ import pyshiny_adaptive_filter.adaptive_filter as adaptive_filter
 T = TypeVar("T")
 
 
+class PdIndexAny(pd.Index): ...
+
+
 class OtherColumnFilterIndexData(NamedTuple):
     """For a given column, store the current filter index values,
     but also store the intersection of all the other filter index values
@@ -19,7 +22,7 @@ class OtherColumnFilterIndexData(NamedTuple):
     """
 
     col: str
-    filter_idx: "pd.Index[Any]"
+    filter_idx: PdIndexAny[Any]
     other_idx: "pd.Index[Any]"
 
 
@@ -29,22 +32,38 @@ class OtherColumnFilterIndexData(NamedTuple):
 # this is different from user selecting everything
 # this None means the filter itself is empty
 def index_intersection_all(
-    to_intersect: List["pd.Index[Any]"],
+    to_intersect: List["pd.Index[Any] | None"],
     default: "pd.Index[Any]",
 ) -> "pd.Index[Any]":
     """Returns the intersection (all common values)
-    across a list of pandas index values
-    """
-    to_intersect = [x for x in to_intersect if x is not None]
+    across a list of pandas index values.
 
-    if len(to_intersect) == 0:
+    Parameters
+    ----------
+    to_intersect : list
+        List containing pandas index objects. List item can be None.
+    default: pd.Index
+        Pandas index to use if all values in `to_intersect` is all None.
+        This is typically the index of the full dataset.
+
+
+    Returns
+    -------
+    pd.Index
+        A pandas Index object.
+    """
+    intersect: List["pd.Index[Any]"] = [
+        x for x in to_intersect if x is not None
+    ]
+
+    if len(intersect) == 0:
         return default
 
-    if len(to_intersect) == 1:
-        return to_intersect[0]
+    if len(intersect) == 1:
+        return intersect[0]
 
-    intersection = to_intersect[0]
-    for index in to_intersect:
+    intersection = intersect[0]
+    for index in intersect:
         intersection = intersection.intersection(index)
 
     return intersection
@@ -107,21 +126,21 @@ def calc_col_type(
     adaptive_filter.FilterNumNumericRange,
     adaptive_filter.FilterCatStringCheckbox,
 ]:
-    col_value: pd.Series[Any] = df()[col_str]
+    col_value: "pd.Series[Any]" = df()[col_str]
     num_unique = col_value.nunique()
 
     if is_string_dtype(col_value):
-        return adaptive_filter.FilterCatStringSelect(
-            df, id, col_str, label, session=session
+        return adaptive_filter.FilterCatStringSelect(label=label).finish_init(
+            df, id, col_str, session=session
         )
     elif is_numeric_dtype(col_value):
         if num_unique <= 10:
             return adaptive_filter.FilterCatNumericSelect(
-                df, id, col_str, label, session=session
-            )
+                label=label
+            ).finish_init(df, id, col_str, session=session)
         else:
             return adaptive_filter.FilterNumNumericRange(
-                df, id, col_str, label, session=session
-            )
+                label=label
+            ).finish_init(df, id, col_str, session=session)
     else:
         raise ValueError
