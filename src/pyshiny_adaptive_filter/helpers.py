@@ -102,13 +102,18 @@ def create_other_column_filter_index_data(
 
 
 def filters_by_colname(
-    df: Callable[[], pd.DataFrame], session: Session
+    df: Callable[[], pd.DataFrame],
+    session: Session,
 ) -> Dict[str, adaptive_filter.BaseFilter]:
     filters_by_colname_dict: Dict[str, adaptive_filter.BaseFilter] = dict()
 
     for col in df().columns:
         filters_by_colname_dict[col] = calc_col_type(
-            df, f"filter_{col}", col, f"{col}", session=session
+            df=df,
+            id=f"filter_{col}",
+            col_str=col,
+            label=f"{col}",
+            session=session,
         )
 
     return filters_by_colname_dict
