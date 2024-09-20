@@ -38,7 +38,10 @@ def filter_server(
             filter: adaptive_filter.BaseFilter,
         ) -> adaptive_filter.BaseFilter:
             filter.finish_init(
-                df, f"filter_{colname}", colname, session=session
+                data=df,
+                id=f"filter_{colname}",
+                column_name=colname,
+                session=session,
             )
             return filter
 
