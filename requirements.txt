@@ -1,3 +1,11 @@
 ipykernel
 shiny
 pandas
+
+# examples
+faicons
+shiny
+shinywidgets
+plotly
+pandas
+ridgeplot
