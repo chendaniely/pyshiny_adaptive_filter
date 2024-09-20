@@ -1,0 +1,8 @@
+faicons
+shiny
+shinywidgets
+plotly
+pandas
+ridgeplot
+git+https://github.com/chendaniely/pyshiny_adaptive_filter.git
+ipykernel
