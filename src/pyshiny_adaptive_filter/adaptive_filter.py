@@ -45,6 +45,7 @@ class BaseFilter(ABC, Generic[T]):
         self.session = require_active_session(session)
 
         if self.label is None:
+            # self.label = self.column_name.title()
             self.label = self.column_name
 
         return self

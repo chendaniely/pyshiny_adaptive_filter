@@ -173,20 +173,21 @@ def server(input, output, session):
 
     # fmt: off
     override = {
-        "total_bill": adaptive_filter.FilterNumNumericRange(label="Total Bill ($)"),
-        "tip": adaptive_filter.FilterNumNumericRange(label="Tip ($)"),
-        "sex": adaptive_filter.FilterCatStringSelect(label="Sex"),
-        "smoker": adaptive_filter.FilterCatStringSelect(label="Smoking Section"),
-        "day": adaptive_filter.FilterCatStringSelect(label="Day of Week"),
-        "time": adaptive_filter.FilterCatStringCheckbox(label="Time of Day"),
-        "size": adaptive_filter.FilterCatStringSelect(label="Party Size"),
+        #"total_bill": adaptive_filter.FilterNumNumericRange(label="Total Bill ($)"),
+        #"total_bill": False,
+        #"total_bill": None,
+        #"tip": adaptive_filter.FilterNumNumericRange(label="Tip ($)"),
+        "sex": adaptive_filter.FilterCatStringSelect(),
+        #"smoker": adaptive_filter.FilterCatStringSelect(label="Smoking Section"),
+        #"day": adaptive_filter.FilterCatStringSelect(label="Day of Week"),
+        #time": adaptive_filter.FilterCatStringCheckbox(label="Time of Day"),
+        "time": adaptive_filter.FilterCatStringCheckbox(),
+        #"size": adaptive_filter.FilterCatNumericSelect(label="Party Size"),
     }
     # fmt: on
 
     adaptive_filters = adaptive_filter_module.filter_server(
-        "adaptive",
-        df=tips_original,
-        override=override,
+        "adaptive", df=tips_original, override=override
     )
     adaptive_filters_idx = adaptive_filters["filter_idx"]
     adaptive_reset_all = adaptive_filters["reset_all"]

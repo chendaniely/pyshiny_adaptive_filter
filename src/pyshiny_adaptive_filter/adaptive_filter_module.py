@@ -29,21 +29,41 @@ def filter_server(
     session: Session,
     df: Callable[[], pd.DataFrame],
     reset_id: str | None = None,
-    override: Dict[str, adaptive_filter.BaseFilter] = {},
+    override: Dict[str, Union[adaptive_filter.BaseFilter, str, None]] = {},
+    col_create: List[str] = [],
+    col_remove: List[str] = [],
 ) -> FilterServerResults:
+    #
+    # begin server functions
+    #
+
     @reactive.calc
     def filters_by_colname() -> Dict[str, adaptive_filter.BaseFilter]:
         def make_filter_obj(
             colname: str,
-            filter: adaptive_filter.BaseFilter,
+            filter: adaptive_filter.BaseFilter | str | None,
         ) -> adaptive_filter.BaseFilter:
-            filter.finish_init(
-                data=df,
-                id=f"filter_{colname}",
-                column_name=colname,
-                session=session,
-            )
-            return filter
+            if isinstance(filter, adaptive_filter.BaseFilter):
+                filter.finish_init(
+                    data=df,
+                    id=f"filter_{colname}",
+                    column_name=colname,
+                    session=session,
+                )
+                return filter
+
+        filter_objs = {
+            key: val
+            for key, val in override.items()
+            if key in df().columns
+            and isinstance(val, adaptive_filter.BaseFilter)
+        }
+        cols_to_remove = [
+            key
+            for key, val in override.items()
+            if key in df().columns and val is None
+        ]
+        custom_labels = []
 
         filters_by_colname = helpers.filters_by_colname(df, session)
         valid_override = {
@@ -54,6 +74,14 @@ def filter_server(
         filters_by_colname.update(valid_override)
 
         return filters_by_colname
+
+    @reactive.calc
+    def valid_columns() -> List[str]:
+        # df.columns is an index, but the return is a list of column names
+        create_col = df().columns if not col_create else pd.Index(col_create)
+        filter_cols = create_col.difference(pd.Index(col_remove))
+        print(filter_cols)
+        return filter_cols.to_list()
 
     @render.ui
     def render_all_filters() -> List[Tag]:  # type: ignore # unusedFunction

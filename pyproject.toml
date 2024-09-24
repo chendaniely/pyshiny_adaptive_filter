@@ -33,8 +33,6 @@ Documentation = "https://github.com/chendaniely/pyshiny_adaptive_filter#readme"
 Issues = "https://github.com/chendaniely/pyshiny_adaptive_filter/issues"
 Source = "https://github.com/chendaniely/pyshiny_adaptive_filter"
 
-# TODO: these 2 sections may be missing in the pyopensci instructions
-# https://github.com/pypa/hatch/discussions/1051
 [tool.hatch.build]
 include = ['src/pyshiny_adaptive_filter']
 

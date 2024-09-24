@@ -138,6 +138,7 @@ def calc_col_type(
         return adaptive_filter.FilterCatStringSelect(label=label).finish_init(
             df, id, col_str, session=session
         )
+    # TODO: make < 3 a checkbox
     elif is_numeric_dtype(col_value):
         if num_unique <= 10:
             return adaptive_filter.FilterCatNumericSelect(
