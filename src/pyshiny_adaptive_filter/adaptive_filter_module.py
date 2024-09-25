@@ -27,11 +27,9 @@ def filter_server(
     input: Inputs,
     output: Outputs,
     session: Session,
-    df: Callable[[], pd.DataFrame],
+    df: Callable[[], pd.DataFrame] | pd.DataFrame,
     reset_id: str | None = None,
     override: Dict[str, Union[adaptive_filter.BaseFilter, str, None]] = {},
-    col_create: List[str] = [],
-    col_remove: List[str] = [],
 ) -> FilterServerResults:
     #
     # begin server functions
@@ -74,14 +72,6 @@ def filter_server(
         filters_by_colname.update(valid_override)
 
         return filters_by_colname
-
-    @reactive.calc
-    def valid_columns() -> List[str]:
-        # df.columns is an index, but the return is a list of column names
-        create_col = df().columns if not col_create else pd.Index(col_create)
-        filter_cols = create_col.difference(pd.Index(col_remove))
-        print(filter_cols)
-        return filter_cols.to_list()
 
     @render.ui
     def render_all_filters() -> List[Tag]:  # type: ignore # unusedFunction
