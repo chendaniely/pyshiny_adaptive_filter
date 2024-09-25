@@ -51,10 +51,19 @@ def filter_server(
 
     @reactive.calc
     def filters_by_colname() -> Dict[str, adaptive_filter.BaseFilter]:
+        """Creates the individual UI elements.
+        This is where we can handle the override inputs
+        """
+
         def make_filter_obj(
             colname: str,
             filter: adaptive_filter.BaseFilter | str | None,
         ) -> adaptive_filter.BaseFilter:
+            """Little hack to finish the initialization.
+            To avoid dealing with the session within the module and
+            from the app calling the module,
+            we are passing in the constructor for each override
+            """
             if isinstance(filter, adaptive_filter.BaseFilter):
                 filter.finish_init(
                     data=df,
@@ -64,26 +73,29 @@ def filter_server(
                 )
                 return filter
 
-        filter_objs = {
-            key: val
-            for key, val in override.items()
-            if key in df().columns
-            and isinstance(val, adaptive_filter.BaseFilter)
-        }
-        cols_to_remove = [
-            key
-            for key, val in override.items()
-            if key in df().columns and val is None
-        ]
-        custom_labels = []
-
+        # make all the filters
         filters_by_colname = helpers.filters_by_colname(df, session)
+
+        # if a user passes in a basefilter, override the output
         valid_override = {
             key: make_filter_obj(key, val)
             for key, val in override.items()
             if key in df().columns
+            and isinstance(val, adaptive_filter.BaseFilter)
         }
         filters_by_colname.update(valid_override)
+
+        # remove filter if user passed in None
+        none_override = [
+            key
+            for key, val in override.items()
+            if key in df().columns and val is None
+        ]
+        filters_by_colname = {
+            key: val
+            for key, val in filters_by_colname.items()
+            if key not in none_override
+        }
 
         return filters_by_colname
 
