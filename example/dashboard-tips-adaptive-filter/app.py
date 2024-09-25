@@ -180,9 +180,10 @@ def server(input, output, session):
         #"sex": adaptive_filter.FilterCatStringSelect(),
         #"smoker": adaptive_filter.FilterCatStringSelect(label="Smoking Section"),
         #"day": adaptive_filter.FilterCatStringSelect(label="Day of Week"),
+        "day": "DAY!",
         #time": adaptive_filter.FilterCatStringCheckbox(label="Time of Day"),
         #"time": adaptive_filter.FilterCatStringCheckbox(),
-        #"time": adaptive_filter.FilterCatStringSelect(label="manual time"),
+        "time": adaptive_filter.FilterCatStringSelect,
         #"size": adaptive_filter.FilterCatNumericSelect(label="Party Size"),
         "size": adaptive_filter.FilterCatNumericCheckbox(label="Party Size"),
     }

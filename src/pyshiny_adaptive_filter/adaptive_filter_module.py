@@ -97,6 +97,16 @@ def filter_server(
             if key not in none_override
         }
 
+        # if user passes a string, override the current label
+        str_rename = {
+            okey: oval
+            for okey, oval in override.items()
+            if okey in df().columns and isinstance(oval, str)
+        }
+        for fkey, fval in filters_by_colname.items():
+            if fkey in str_rename.keys():
+                filters_by_colname[fkey].label = str_rename[fkey]
+
         return filters_by_colname
 
     @reactive.calc
