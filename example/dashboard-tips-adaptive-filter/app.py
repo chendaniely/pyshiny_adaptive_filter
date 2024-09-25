@@ -184,7 +184,7 @@ def server(input, output, session):
         #"time": adaptive_filter.FilterCatStringCheckbox(),
         #"time": adaptive_filter.FilterCatStringSelect(label="manual time"),
         #"size": adaptive_filter.FilterCatNumericSelect(label="Party Size"),
-        #"size": adaptive_filter.FilterCatNumericSelect(label="Party Size"),
+        "size": adaptive_filter.FilterCatNumericCheckbox(label="Party Size"),
     }
     # fmt: on
 

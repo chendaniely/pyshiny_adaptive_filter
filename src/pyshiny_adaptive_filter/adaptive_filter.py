@@ -332,3 +332,64 @@ class FilterCatStringCheckbox(BaseFilter[str]):
                 choices=choices,
                 selected=None,
             )
+
+
+class FilterCatNumericCheckbox(BaseFilter[str]):
+    """Creates a checkbox filter on a categorical numeric value
+
+    This is really similar to the FilterCatStringCheckbox,
+    it returns a checkbox, but works when we need to do comparisons
+    as if the values are both numeric
+    """
+
+    def ui(self) -> Tag:
+        choices: Dict[str, str] = {
+            str(option): str(option)
+            for option in sorted(self.data()[self.column_name].unique())
+        }
+
+        return ui.input_checkbox_group(
+            id=self.filter_id,
+            label=self.label,
+            choices=choices,
+        )
+
+    def matching_rows(self) -> Union["pd.Index[Any]", None]:
+        input_value: Iterable[str] | None = self._get_input_value()
+
+        if input_value is None:
+            return None
+
+        input_value: Iterable[float] = [float(x) for x in input_value]
+
+        return return_index(
+            self.data().loc[self.data()[self.column_name].isin(input_value)]
+        )
+
+    def narrow_options(self, valid_rows: "pd.Index[Any]"):
+        input = self.session.input
+
+        choices: Dict[str, str] = {
+            str(option): str(option)
+            for option in sorted(
+                self.data().loc[valid_rows, self.column_name].unique()
+            )  # type: ignore
+        }
+
+        ui.update_checkbox_group(
+            id=self.filter_id,
+            choices=choices,
+            selected=input[self.filter_id](),
+        )
+
+    def reset(self) -> None:
+        with session_context(self.session):
+            choices: Dict[str, str] = {
+                option.title(): option
+                for option in self.data()[self.column_name].unique()
+            }
+            ui.update_checkbox_group(
+                id=self.filter_id,
+                choices=choices,
+                selected=None,
+            )
