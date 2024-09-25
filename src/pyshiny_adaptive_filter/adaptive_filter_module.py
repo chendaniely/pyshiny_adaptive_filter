@@ -35,6 +35,20 @@ def filter_server(
     # begin server functions
     #
 
+    @render.ui
+    def render_all_filters() -> List[Tag]:  # type: ignore # unusedFunction
+        """Render UI that creates all the filters for the module output
+        This is the first part of the reactive chain
+        """
+        ui_elements = [
+            filter_type_component.ui()
+            for filter_type_component in cast(
+                Dict, filters_by_colname()
+            ).values()
+        ]
+
+        return ui_elements
+
     @reactive.calc
     def filters_by_colname() -> Dict[str, adaptive_filter.BaseFilter]:
         def make_filter_obj(
@@ -72,17 +86,6 @@ def filter_server(
         filters_by_colname.update(valid_override)
 
         return filters_by_colname
-
-    @render.ui
-    def render_all_filters() -> List[Tag]:  # type: ignore # unusedFunction
-        ui_elements = [
-            filter_type_component.ui()
-            for filter_type_component in cast(
-                Dict, filters_by_colname()
-            ).values()
-        ]
-
-        return ui_elements
 
     @reactive.calc
     def col_idx_intersection_others() -> (
