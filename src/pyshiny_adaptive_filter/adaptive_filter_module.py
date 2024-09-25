@@ -27,22 +27,43 @@ def filter_server(
     input: Inputs,
     output: Outputs,
     session: Session,
-    df: Callable[[], pd.DataFrame],
+    df: Callable[[], pd.DataFrame] | pd.DataFrame,
     reset_id: str | None = None,
     override: Dict[str, Union[adaptive_filter.BaseFilter, str, None]] = {},
-    col_create: List[str] = [],
-    col_remove: List[str] = [],
 ) -> FilterServerResults:
     #
     # begin server functions
     #
 
+    @render.ui
+    def render_all_filters() -> List[Tag]:  # type: ignore # unusedFunction
+        """Render UI that creates all the filters for the module output
+        This is the first part of the reactive chain
+        """
+        ui_elements = [
+            filter_type_component.ui()
+            for filter_type_component in cast(
+                Dict, filters_by_colname()
+            ).values()
+        ]
+
+        return ui_elements
+
     @reactive.calc
     def filters_by_colname() -> Dict[str, adaptive_filter.BaseFilter]:
+        """Creates the individual UI elements.
+        This is where we can handle the override inputs
+        """
+
         def make_filter_obj(
             colname: str,
             filter: adaptive_filter.BaseFilter | str | None,
         ) -> adaptive_filter.BaseFilter:
+            """Little hack to finish the initialization.
+            To avoid dealing with the session within the module and
+            from the app calling the module,
+            we are passing in the constructor for each override
+            """
             if isinstance(filter, adaptive_filter.BaseFilter):
                 filter.finish_init(
                     data=df,
@@ -52,47 +73,41 @@ def filter_server(
                 )
                 return filter
 
-        filter_objs = {
-            key: val
-            for key, val in override.items()
-            if key in df().columns
-            and isinstance(val, adaptive_filter.BaseFilter)
-        }
-        cols_to_remove = [
-            key
-            for key, val in override.items()
-            if key in df().columns and val is None
-        ]
-        custom_labels = []
-
+        # make all the filters
         filters_by_colname = helpers.filters_by_colname(df, session)
+
+        # if a user passes in a basefilter, override the output
         valid_override = {
             key: make_filter_obj(key, val)
             for key, val in override.items()
             if key in df().columns
+            and isinstance(val, adaptive_filter.BaseFilter)
         }
         filters_by_colname.update(valid_override)
 
-        return filters_by_colname
-
-    @reactive.calc
-    def valid_columns() -> List[str]:
-        # df.columns is an index, but the return is a list of column names
-        create_col = df().columns if not col_create else pd.Index(col_create)
-        filter_cols = create_col.difference(pd.Index(col_remove))
-        print(filter_cols)
-        return filter_cols.to_list()
-
-    @render.ui
-    def render_all_filters() -> List[Tag]:  # type: ignore # unusedFunction
-        ui_elements = [
-            filter_type_component.ui()
-            for filter_type_component in cast(
-                Dict, filters_by_colname()
-            ).values()
+        # remove filter if user passed in None
+        none_override = [
+            key
+            for key, val in override.items()
+            if key in df().columns and val is None
         ]
+        filters_by_colname = {
+            key: val
+            for key, val in filters_by_colname.items()
+            if key not in none_override
+        }
 
-        return ui_elements
+        # if user passes a string, override the current label
+        str_rename = {
+            okey: oval
+            for okey, oval in override.items()
+            if okey in df().columns and isinstance(oval, str)
+        }
+        for fkey, fval in filters_by_colname.items():
+            if fkey in str_rename.keys():
+                filters_by_colname[fkey].label = str_rename[fkey]
+
+        return filters_by_colname
 
     @reactive.calc
     def col_idx_intersection_others() -> (

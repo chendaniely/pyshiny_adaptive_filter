@@ -175,14 +175,17 @@ def server(input, output, session):
     override = {
         #"total_bill": adaptive_filter.FilterNumNumericRange(label="Total Bill ($)"),
         #"total_bill": False,
-        #"total_bill": None,
+        "total_bill": None,
         #"tip": adaptive_filter.FilterNumNumericRange(label="Tip ($)"),
-        "sex": adaptive_filter.FilterCatStringSelect(),
+        #"sex": adaptive_filter.FilterCatStringSelect(),
         #"smoker": adaptive_filter.FilterCatStringSelect(label="Smoking Section"),
         #"day": adaptive_filter.FilterCatStringSelect(label="Day of Week"),
+        "day": "DAY!",
         #time": adaptive_filter.FilterCatStringCheckbox(label="Time of Day"),
-        "time": adaptive_filter.FilterCatStringCheckbox(),
+        #"time": adaptive_filter.FilterCatStringCheckbox(),
+        "time": adaptive_filter.FilterCatStringSelect,
         #"size": adaptive_filter.FilterCatNumericSelect(label="Party Size"),
+        "size": adaptive_filter.FilterCatNumericCheckbox(label="Party Size"),
     }
     # fmt: on
 
