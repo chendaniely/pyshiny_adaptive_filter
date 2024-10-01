@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "shiny_adaptive_filter"
-version = "0.0.1.9000"
+version = "0.0.1.9001"
 description = 'Shiny for Python module that implments UI components that are aware and adapts to other component selections.'
 readme = "README.md"
 requires-python = ">=3.10"
