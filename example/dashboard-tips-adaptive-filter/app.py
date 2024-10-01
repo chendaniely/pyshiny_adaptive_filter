@@ -7,6 +7,10 @@ from shiny import App, reactive, render, ui
 from shinywidgets import output_widget, render_plotly
 
 from pyshiny_adaptive_filter import adaptive_filter_module, adaptive_filter
+# TODO: make imports better like this:
+# from shiny_adaptive_filter import adaptive_filter_module, adaptive_filter
+# from shiny_adaptive_filter import adaptive_filter
+# import shiny_adaptive_filter as af
 
 ICONS = {
     "user": fa.icon_svg("user", "regular"),
@@ -183,9 +187,11 @@ def server(input, output, session):
         "day": "DAY!",
         #time": adaptive_filter.FilterCatStringCheckbox(label="Time of Day"),
         #"time": adaptive_filter.FilterCatStringCheckbox(),
-        "time": adaptive_filter.FilterCatStringSelect,
+        "time": adaptive_filter.FilterCatStringSelect(),
+        #"time": adaptive_filter.FilterCatStringSelect,
         #"size": adaptive_filter.FilterCatNumericSelect(label="Party Size"),
         "size": adaptive_filter.FilterCatNumericCheckbox(label="Party Size"),
+
     }
     # fmt: on
 
