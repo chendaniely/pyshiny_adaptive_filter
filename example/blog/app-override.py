@@ -1,7 +1,7 @@
 import pandas as pd
 from shiny import App, render, reactive, ui
 
-from pyshiny_adaptive_filter import adaptive_filter_module, adaptive_filter
+from shiny_adaptive_filter import adaptive_filter_module, adaptive_filter
 
 data = {
     "total_bill": [16.99, 10.34, 21.01, 23.68, 24.59],

@@ -1,6 +1,6 @@
 import pandas as pd
 
-from pyshiny_adaptive_filter import helpers
+from shiny_adaptive_filter import helpers
 
 
 idx1 = pd.Index([1, 2, 3, 4, 5])
