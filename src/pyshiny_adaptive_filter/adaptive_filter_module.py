@@ -87,15 +87,6 @@ def filter_server(
         # make all the filters
         filters_by_colname = helpers.filters_by_colname(df, session)
 
-        # if a user passes in a basefilter, override the output
-        valid_override = {
-            key: make_filter_obj(key, val)
-            for key, val in override.items()
-            if key in df().columns
-            and isinstance(val, adaptive_filter.BaseFilter)
-        }
-        filters_by_colname.update(valid_override)
-
         # remove filter if user passed in None
         none_override = [
             key
@@ -108,6 +99,15 @@ def filter_server(
             if key not in none_override
         }
 
+        # if a user passes in a basefilter, override the output
+        valid_override = {
+            key: make_filter_obj(key, val)
+            for key, val in override.items()
+            if key in df().columns
+            and isinstance(val, adaptive_filter.BaseFilter)
+        }
+        filters_by_colname.update(valid_override)
+
         # if user passes a string, override the current label
         str_rename = {
             okey: oval
@@ -117,6 +117,7 @@ def filter_server(
         for fkey, fval in filters_by_colname.items():
             if fkey in str_rename.keys():
                 filters_by_colname[fkey].label = str_rename[fkey]
+                print(f"rename label: {fkey}")
 
         return filters_by_colname
 
