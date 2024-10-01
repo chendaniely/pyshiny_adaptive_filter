@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Dict, Union, List, Callable, Any, cast, TypedDict
+from typing import Dict, Union, List, Callable, Any, cast, TypedDict, TypeVar
 from pprint import pprint
 
 from htmltools import Tag
@@ -9,6 +9,8 @@ from shiny import module, ui
 
 import pyshiny_adaptive_filter.helpers as helpers
 import pyshiny_adaptive_filter.adaptive_filter as adaptive_filter
+
+T = TypeVar("T")
 
 
 class FilterServerResults(TypedDict):
@@ -20,6 +22,13 @@ class FilterServerResults(TypedDict):
 @module.ui
 def filter_ui():
     return ui.output_ui("render_all_filters")
+
+
+def ensure_func(value_or_func: T | Callable[[], T]) -> Callable[[], T]:
+    if callable(value_or_func):
+        return cast(Callable[[], T], value_or_func)
+    else:
+        return lambda: value_or_func
 
 
 @module.server
@@ -34,6 +43,8 @@ def filter_server(
     #
     # begin server functions
     #
+
+    df = ensure_func(df)
 
     @render.ui
     def render_all_filters() -> List[Tag]:  # type: ignore # unusedFunction
@@ -76,15 +87,6 @@ def filter_server(
         # make all the filters
         filters_by_colname = helpers.filters_by_colname(df, session)
 
-        # if a user passes in a basefilter, override the output
-        valid_override = {
-            key: make_filter_obj(key, val)
-            for key, val in override.items()
-            if key in df().columns
-            and isinstance(val, adaptive_filter.BaseFilter)
-        }
-        filters_by_colname.update(valid_override)
-
         # remove filter if user passed in None
         none_override = [
             key
@@ -97,6 +99,15 @@ def filter_server(
             if key not in none_override
         }
 
+        # if a user passes in a basefilter, override the output
+        valid_override = {
+            key: make_filter_obj(key, val)
+            for key, val in override.items()
+            if key in df().columns
+            and isinstance(val, adaptive_filter.BaseFilter)
+        }
+        filters_by_colname.update(valid_override)
+
         # if user passes a string, override the current label
         str_rename = {
             okey: oval
@@ -106,6 +117,7 @@ def filter_server(
         for fkey, fval in filters_by_colname.items():
             if fkey in str_rename.keys():
                 filters_by_colname[fkey].label = str_rename[fkey]
+                print(f"rename label: {fkey}")
 
         return filters_by_colname
 

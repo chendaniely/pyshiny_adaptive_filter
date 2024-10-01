@@ -30,3 +30,9 @@ Install Hatch
 ```shell
 brew install hatch
 ```
+
+Need to install playwright browsers after new environment setup
+
+```bash
+playwright install
+```

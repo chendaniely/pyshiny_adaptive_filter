@@ -9,3 +9,8 @@ shinywidgets
 plotly
 pandas
 ridgeplot
+
+# test
+playwright
+pytest
+pytest-playwright
