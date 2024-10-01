@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Dict, Union, List, Callable, Any, cast, TypedDict
+from typing import Dict, Union, List, Callable, Any, cast, TypedDict, TypeVar
 from pprint import pprint
 
 from htmltools import Tag
@@ -9,6 +9,8 @@ from shiny import module, ui
 
 import pyshiny_adaptive_filter.helpers as helpers
 import pyshiny_adaptive_filter.adaptive_filter as adaptive_filter
+
+T = TypeVar("T")
 
 
 class FilterServerResults(TypedDict):
@@ -20,6 +22,13 @@ class FilterServerResults(TypedDict):
 @module.ui
 def filter_ui():
     return ui.output_ui("render_all_filters")
+
+
+def ensure_func(value_or_func: T | Callable[[], T]) -> Callable[[], T]:
+    if callable(value_or_func):
+        return cast(Callable[[], T], value_or_func)
+    else:
+        return lambda: value_or_func
 
 
 @module.server
@@ -34,6 +43,8 @@ def filter_server(
     #
     # begin server functions
     #
+
+    df = ensure_func(df)
 
     @render.ui
     def render_all_filters() -> List[Tag]:  # type: ignore # unusedFunction
