@@ -19,14 +19,6 @@ def return_index(df: pd.DataFrame) -> "pd.Index[Any]":
 T = TypeVar("T")
 
 
-class FilterConstructor(Protocol):
-    def __call__(
-        self,
-        *,
-        label: str | None = None,
-    ) -> BaseFilter: ...
-
-
 class BaseFilter(ABC, Generic[T]):
     def __init__(self, *, label: str | None = None):
         self.label = label
