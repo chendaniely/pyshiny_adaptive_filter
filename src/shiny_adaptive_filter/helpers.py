@@ -5,7 +5,7 @@ import pandas as pd
 from pandas.api.types import is_numeric_dtype, is_string_dtype  # pyright: ignore [reportUnknownVariableType]
 from shiny import Session
 
-import pyshiny_adaptive_filter.adaptive_filter as adaptive_filter
+import shiny_adaptive_filter.adaptive_filter as adaptive_filter
 
 T = TypeVar("T")
 

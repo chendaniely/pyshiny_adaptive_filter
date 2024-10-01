@@ -1,7 +1,7 @@
 # Shiny for Python Adaptive Filters
 
-[![PyPI - Version](https://img.shields.io/pypi/v/pyshiny-adaptive-filter.svg)](https://pypi.org/project/pyshiny-adaptive-filter)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyshiny-adaptive-filter.svg)](https://pypi.org/project/pyshiny-adaptive-filter)
+[![PyPI - Version](https://img.shields.io/pypi/v/shiny-adaptive-filter.svg)](https://pypi.org/project/shiny-adaptive-filter)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/shiny-adaptive-filter.svg)](https://pypi.org/project/shiny-adaptive-filter)
 
 -----
 
@@ -12,7 +12,7 @@ pip install git+https://github.com/chendaniely/pyshiny_adaptive_filter.git
 ```
 
 ```console
-pip install pyshiny_adaptive_filter
+pip install shiny_adaptive_filter
 ```
 
 ## License

@@ -7,8 +7,8 @@ import pandas as pd
 from shiny import reactive, render, Inputs, Outputs, Session
 from shiny import module, ui
 
-import pyshiny_adaptive_filter.helpers as helpers
-import pyshiny_adaptive_filter.adaptive_filter as adaptive_filter
+import shiny_adaptive_filter.helpers as helpers
+import shiny_adaptive_filter.adaptive_filter as adaptive_filter
 
 T = TypeVar("T")
 
