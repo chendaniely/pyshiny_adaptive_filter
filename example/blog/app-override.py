@@ -1,7 +1,8 @@
 import pandas as pd
 from shiny import App, render, reactive, ui
 
-from shiny_adaptive_filter import adaptive_filter_module, adaptive_filter
+# from shiny_adaptive_filter import adaptive_filter_module, adaptive_filter
+import shiny_adaptive_filter as af
 
 data = {
     "total_bill": [16.99, 10.34, 21.01, 23.68, 24.59],
@@ -17,7 +18,7 @@ tips = pd.DataFrame(data)
 
 app_ui = ui.page_sidebar(
     ui.sidebar(
-        adaptive_filter_module.filter_ui("adaptive"),
+        af.filter_ui("adaptive"),
     ),
     ui.output_data_frame("render_df"),
 )
@@ -36,12 +37,12 @@ def server(input, output, session):
     override = {
         "total_bill": None,
         "tip": None,
-        "day": adaptive_filter.FilterCatStringSelect(label="Day of Week"),
-        "time": adaptive_filter.FilterCatStringSelect(),
+        "day": af.FilterCatStringSelect(label="Day of Week"),
+        "time": af.FilterCatStringSelect(),
         "size": "Party Size",
     }
 
-    filter_return = adaptive_filter_module.filter_server(
+    filter_return = af.filter_server(
         "adaptive",
         df=tips,
         override=override,

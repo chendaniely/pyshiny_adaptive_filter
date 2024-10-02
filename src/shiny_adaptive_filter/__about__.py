@@ -1,4 +1,1 @@
-# SPDX-FileCopyrightText: 2024-present Daniel Chen <chendaniely@users.noreply.github.com>
-#
-# SPDX-License-Identifier: MIT
-__version__ = "0.0.1.9002"
+__version__ = "0.0.1.9003"
