@@ -6,11 +6,7 @@ from shared import app_dir, tips
 from shiny import App, reactive, render, ui
 from shinywidgets import output_widget, render_plotly
 
-from shiny_adaptive_filter import adaptive_filter_module, adaptive_filter
-# TODO: make imports better like this:
-# from shiny_adaptive_filter import adaptive_filter_module, adaptive_filter
-# from shiny_adaptive_filter import adaptive_filter
-# import shiny_adaptive_filter as af
+import shiny_adaptive_filter as saf
 
 ICONS = {
     "user": fa.icon_svg("user", "regular"),
@@ -23,7 +19,7 @@ ICONS = {
 app_ui = ui.page_sidebar(
     ui.sidebar(
         ui.input_action_button("reset", "Reset filters"),
-        adaptive_filter_module.filter_ui("adaptive"),
+        saf.filter_ui("adaptive"),
     ),
     ui.layout_columns(
         ui.value_box(
@@ -97,12 +93,8 @@ app_ui = ui.page_sidebar(
 
 def server(input, output, session):
     @reactive.calc
-    def tips_original():
-        return tips
-
-    @reactive.calc
     def tips_data():
-        return tips_original().loc[adaptive_filters_idx()]
+        return tips.loc[adaptive_filters_idx()]
 
     @render.ui
     def total_tippers():
@@ -177,26 +169,26 @@ def server(input, output, session):
 
     # fmt: off
     override = {
-        #"total_bill": adaptive_filter.FilterNumNumericRange(label="Total Bill ($)"),
+        #"total_bill": saf.FilterNumNumericRange(label="Total Bill ($)"),
         #"total_bill": False,
         "total_bill": None,
-        #"tip": adaptive_filter.FilterNumNumericRange(label="Tip ($)"),
-        #"sex": adaptive_filter.FilterCatStringSelect(),
-        #"smoker": adaptive_filter.FilterCatStringSelect(label="Smoking Section"),
-        #"day": adaptive_filter.FilterCatStringSelect(label="Day of Week"),
+        #"tip": saf.FilterNumNumericRange(label="Tip ($)"),
+        #"sex": saf.FilterCatStringSelect(),
+        #"smoker": saf.FilterCatStringSelect(label="Smoking Section"),
+        #"day": saf.FilterCatStringSelect(label="Day of Week"),
         "day": "DAY!",
-        #time": adaptive_filter.FilterCatStringCheckbox(label="Time of Day"),
-        #"time": adaptive_filter.FilterCatStringCheckbox(),
-        "time": adaptive_filter.FilterCatStringSelect(),
-        #"time": adaptive_filter.FilterCatStringSelect,
-        #"size": adaptive_filter.FilterCatNumericSelect(label="Party Size"),
-        "size": adaptive_filter.FilterCatNumericCheckbox(label="Party Size"),
+        #time": saf.FilterCatStringCheckbox(label="Time of Day"),
+        #"time": saf.FilterCatStringCheckbox(),
+        "time": saf.FilterCatStringSelect(),
+        #"time": saf.FilterCatStringSelect,
+        #"size": saf.FilterCatNumericSelect(label="Party Size"),
+        "size": saf.FilterCatNumericCheckbox(label="Party Size"),
 
     }
     # fmt: on
 
-    adaptive_filters = adaptive_filter_module.filter_server(
-        "adaptive", df=tips_original, override=override
+    adaptive_filters = saf.filter_server(
+        "adaptive", df=tips, override=override
     )
     adaptive_filters_idx = adaptive_filters["filter_idx"]
     adaptive_reset_all = adaptive_filters["reset_all"]

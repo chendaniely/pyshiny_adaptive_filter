@@ -10,11 +10,10 @@ def test_basic_app(page: Page, app: ShinyAppProc):
     page.goto(app.url)
 
     day = controller.InputCheckboxGroup(page, "adaptive-filter_day")
+    time = controller.InputCheckboxGroup(page, "adaptive-filter_time")
+
     day.expect_choice_labels(["Sun", "Fri"])
     day.expect_choices(["Sun", "Fri"])
     day.expect_selected([])
-    # day.set(["Fri"])
-
-    time = controller.InputCheckboxGroup(page, "adaptive-filter_time")
-    time.expect_choices(["Lunch", "Dinner"])
-    time.set(["Lunch"])
+    day.set(["Fri"])
+    time.expect_choices(["Dinner"])
