@@ -241,20 +241,8 @@ class FilterNumNumericRange(BaseFilter[int]):
         )
 
     def narrow_options(self, valid_rows: "pd.Index[Any]") -> None:
-        # input = self.session.input
-        # TODO: type is any numeric
-        valid_data: pd.Series[float] = self.data().loc[
-            valid_rows, self.column_name
-        ]
-        valid_min = valid_data.min()
-        valid_max = valid_data.max()
-        ui.update_slider(
-            id=self.filter_id,  # TODO: make sure these are not missing/NAN
-            min=valid_min,  # TODO: these 2 lines were the older behavior
-            max=valid_max,
-            # value=(valid_min, valid_max),
-            session=self.session,
-        )
+        # sliders do not narrow, otherwise the bounds and selections jumps around
+        pass
 
     def reset(self) -> None:
         with session_context(self.session):
