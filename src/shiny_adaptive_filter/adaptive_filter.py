@@ -141,7 +141,7 @@ class FilterCatNumericSelect(BaseFilter[str]):
 
     def ui(self) -> Tag:
         col_val_unique: pd.Series[str] = self.data()[self.column_name].unique()
-        choices: List[str] = pd.to_numeric(col_val_unique).tolist()
+        choices: List[str] = sorted(pd.to_numeric(col_val_unique).tolist())
 
         return ui.input_selectize(
             id=self.filter_id,
