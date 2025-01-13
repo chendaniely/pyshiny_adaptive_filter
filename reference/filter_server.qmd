@@ -1,0 +1,26 @@
+# filter_server { #shiny_adaptive_filter.filter_server }
+
+```python
+filter_server(input, output, session, df, override={})
+```
+
+Adaptive Filter serve function
+
+All the reactive caluclations, ui, etc for the adaptive filter component.
+
+## Parameters {.doc-section .doc-section-parameters}
+
+| Name     | Type                                                        | Description   | Default    |
+|----------|-------------------------------------------------------------|---------------|------------|
+| intput   |                                                             |               | _required_ |
+| output   | Outputs                                                     |               | _required_ |
+| session  | Session                                                     |               | _required_ |
+| df       | Callable\[\[\], pd.DataFrame\] \| pd.DataFrame              |               | _required_ |
+| reset_id |                                                             |               | _required_ |
+| override | Dict\[str, Union\[adaptive_filter.BaseFilter, str, None\]\] |               | `{}`       |
+
+## Returns {.doc-section .doc-section-returns}
+
+| Name   | Type                | Description                                                                                                                                            |
+|--------|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+|        | FilterServerResults | A dictionary containing the the final index values for the filtered dataframe, each adaptive filter, and a callable that can eset the adaptive filters |

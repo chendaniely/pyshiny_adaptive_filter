@@ -1,0 +1,207 @@
+[
+  {
+    "objectID": "reference/FilterNumNumericRange.html",
+    "href": "reference/FilterNumNumericRange.html",
+    "title": "FilterNumNumericRange",
+    "section": "",
+    "text": "FilterNumNumericRange\nFilterNumNumericRange(self, *, label=None)\nCreates a range filter on a numeric column\nDealing with numeric ranges data means that we need to do a few things: 1. find the start and and of the range 2. use the .between() method to check for values between the ranges 3. we are using inclusive = both as a hard-coded default\nAs a range component, we can use the .between() method to test for values.\na range or value slider both use ui.input_slider(), the only difference is input slider ranges are given 2 values for the value parameter",
+    "crumbs": [
+      "Reference",
+      "Adaptive Filters",
+      "FilterNumNumericRange"
+    ]
+  },
+  {
+    "objectID": "reference/filter_ui.html",
+    "href": "reference/filter_ui.html",
+    "title": "filter_ui",
+    "section": "",
+    "text": "filter_ui()\nAdaptive Filter UI\nBy default, the adaptive filter module will insert a best guess component for each of the columns in the dataset. You can override the default component and/or label by passing the module’s server an override argument.\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\ntype\ndescription",
+    "crumbs": [
+      "Reference",
+      "Shiny Module UI and Server",
+      "filter_ui"
+    ]
+  },
+  {
+    "objectID": "reference/filter_ui.html#returns",
+    "href": "reference/filter_ui.html#returns",
+    "title": "filter_ui",
+    "section": "",
+    "text": "Name\nType\nDescription\n\n\n\n\n\ntype\ndescription",
+    "crumbs": [
+      "Reference",
+      "Shiny Module UI and Server",
+      "filter_ui"
+    ]
+  },
+  {
+    "objectID": "reference/FilterCatStringCheckbox.html",
+    "href": "reference/FilterCatStringCheckbox.html",
+    "title": "FilterCatStringCheckbox",
+    "section": "",
+    "text": "FilterCatStringCheckbox\nFilterCatStringCheckbox(self, *, label=None)\nCreates a checkbox filter on a categorical string\nThis is really similar to the FilterCatStringSelect except it returns a checkbox instead of a selectize UI. Useful for columns with not as many options to pick from",
+    "crumbs": [
+      "Reference",
+      "Adaptive Filters",
+      "FilterCatStringCheckbox"
+    ]
+  },
+  {
+    "objectID": "reference/filter_server.html",
+    "href": "reference/filter_server.html",
+    "title": "filter_server",
+    "section": "",
+    "text": "filter_server(input, output, session, df, override={})\nAdaptive Filter serve function\nAll the reactive caluclations, ui, etc for the adaptive filter component.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nintput\n\n\nrequired\n\n\noutput\nOutputs\n\nrequired\n\n\nsession\nSession\n\nrequired\n\n\ndf\nCallable[[], pd.DataFrame] | pd.DataFrame\n\nrequired\n\n\nreset_id\n\n\nrequired\n\n\noverride\nDict[str, Union[adaptive_filter.BaseFilter, str, None]]\n\n{}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\nFilterServerResults\nA dictionary containing the the final index values for the filtered dataframe, each adaptive filter, and a callable that can eset the adaptive filters",
+    "crumbs": [
+      "Reference",
+      "Shiny Module UI and Server",
+      "filter_server"
+    ]
+  },
+  {
+    "objectID": "reference/filter_server.html#parameters",
+    "href": "reference/filter_server.html#parameters",
+    "title": "filter_server",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nintput\n\n\nrequired\n\n\noutput\nOutputs\n\nrequired\n\n\nsession\nSession\n\nrequired\n\n\ndf\nCallable[[], pd.DataFrame] | pd.DataFrame\n\nrequired\n\n\nreset_id\n\n\nrequired\n\n\noverride\nDict[str, Union[adaptive_filter.BaseFilter, str, None]]\n\n{}",
+    "crumbs": [
+      "Reference",
+      "Shiny Module UI and Server",
+      "filter_server"
+    ]
+  },
+  {
+    "objectID": "reference/filter_server.html#returns",
+    "href": "reference/filter_server.html#returns",
+    "title": "filter_server",
+    "section": "",
+    "text": "Name\nType\nDescription\n\n\n\n\n\nFilterServerResults\nA dictionary containing the the final index values for the filtered dataframe, each adaptive filter, and a callable that can eset the adaptive filters",
+    "crumbs": [
+      "Reference",
+      "Shiny Module UI and Server",
+      "filter_server"
+    ]
+  },
+  {
+    "objectID": "reference/BaseFilter.html",
+    "href": "reference/BaseFilter.html",
+    "title": "BaseFilter",
+    "section": "",
+    "text": "BaseFilter\nBaseFilter(self, *, label=None)",
+    "crumbs": [
+      "Reference",
+      "Adaptive Filters",
+      "BaseFilter"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Introducing Adaptive Filters",
+    "section": "",
+    "text": "One limitation when trying to use Shiny components to filter a dataframe is the components mainly work in an and operator on the data. This means that when you are trying to interactively explore your data, you will inevitably end up selecting a combination of filter values that will return an empty dataframe.\nThis package implements a new set of shiny selectize, checkbox, and slider components to help you with these kinds of interactive data filtering tasks.\nYou can install it on from PyPI."
+  },
+  {
+    "objectID": "index.html#the-problem",
+    "href": "index.html#the-problem",
+    "title": "Introducing Adaptive Filters",
+    "section": "The Problem",
+    "text": "The Problem\nLet’s illustrate the limitation the current components have and how it can lead to subsetting an empty dataframe. Imagine this small tips dataset.\n\n\nCode\nimport pandas as pd\n\ndata = {\n    'total_bill': [16.99, 10.34, 21.01, 23.68, 24.59],\n    'tip': [1.01, 1.66, 3.50, 3.31, 3.61],\n    'sex': ['Female', 'Male', 'Male', 'Male', 'Female'],\n    'smoker': ['No', 'No', 'No', 'No', 'Yes'],\n    'day': ['Sun', 'Sun', 'Sun', 'Fri', 'Sun'],\n    'time': ['Lunch', 'Dinner', 'Dinner', 'Dinner', 'Dinner'],\n    'size': [2, 3, 3, 2, 4]\n}\n\ntips = pd.DataFrame(data)\ntips\n\n\n\n\n\n\n\n\n\ntotal_bill\ntip\nsex\nsmoker\nday\ntime\nsize\n\n\n\n\n0\n16.99\n1.01\nFemale\nNo\nSun\nLunch\n2\n\n\n1\n10.34\n1.66\nMale\nNo\nSun\nDinner\n3\n\n\n2\n21.01\n3.50\nMale\nNo\nSun\nDinner\n3\n\n\n3\n23.68\n3.31\nMale\nNo\nFri\nDinner\n2\n\n\n4\n24.59\n3.61\nFemale\nYes\nSun\nDinner\n4\n\n\n\n\n\n\n\nIn shiny, you will typically create a separate input component for each column of the data. For example, if we created a Day component that filters the day variable down to Fri. we would be left with one row of data.\n\n\nCode\ntips.loc[tips[\"day\"] == \"Fri\"]\n\n\n\n\n\n\n\n\n\ntotal_bill\ntip\nsex\nsmoker\nday\ntime\nsize\n\n\n\n\n3\n23.68\n3.31\nMale\nNo\nFri\nDinner\n2\n\n\n\n\n\n\n\nTraditionally, your filter components will still have options for the entire dataframe, it does not react to the filters you already selected. For example, in a normal shiny application, you will still see Lunch in the time filter. This means the user can still select Fri and subsequently, Lunch and be left with an empty dataframe result. This empty dataframe result may not be what you want the end user to see.\n\n\nCode\ntips.loc[(tips[\"day\"] == \"Fri\") & (tips[\"time\"] == \"Lunch\")]\n\n\n\n\n\n\n\n\n\ntotal_bill\ntip\nsex\nsmoker\nday\ntime\nsize\n\n\n\n\n\n\n\n\n\n\nHere’s an example shiny application showing this behavior. Try selecting both Fri and Lunch.\n\n#| '!! shinylive warning !!': |\n#|   shinylive does not work in self-contained HTML documents.\n#|   Please set `embed-resources: false` in your metadata.\n#| standalone: true\n#| components: [editor, viewer]\n#| viewerHeight: 700\n\nimport pandas as pd\nfrom shiny import App, render, reactive, ui\n\ndata = {\n    \"total_bill\": [16.99, 10.34, 21.01, 23.68, 24.59],\n    \"tip\": [1.01, 1.66, 3.50, 3.31, 3.61],\n    \"sex\": [\"Female\", \"Male\", \"Male\", \"Male\", \"Female\"],\n    \"smoker\": [\"No\", \"No\", \"No\", \"No\", \"Yes\"],\n    \"day\": [\"Sun\", \"Sun\", \"Sun\", \"Fri\", \"Sun\"],\n    \"time\": [\"Lunch\", \"Dinner\", \"Dinner\", \"Dinner\", \"Dinner\"],\n    \"size\": [2, 3, 3, 2, 4],\n}\n\ntips = pd.DataFrame(data)\n\napp_ui = ui.page_sidebar(\n    ui.sidebar(\n        ui.input_checkbox_group(\n            \"filter_day\",\n            \"Day:\",\n            {x: x for x in sorted(tips[\"day\"].unique())},\n        ),\n        ui.input_checkbox_group(\n            \"filter_time\",\n            \"Time:\",\n            {x: x for x in sorted(tips[\"time\"].unique())},\n        ),\n    ),\n    ui.output_data_frame(\"render_df\"),\n)\n\n\ndef server(input, output, session):\n    @reactive.calc\n    def data_filtered():\n        df = tips\n        if input.filter_day():\n            df = df.loc[df[\"day\"].isin(input.filter_day())]\n        if input.filter_time():\n            df = df.loc[df[\"time\"].isin(input.filter_time())]\n        return df\n\n    @render.data_frame\n    def render_df():\n        return render.DataGrid(data_filtered())\n\n\napp = App(app_ui, server)"
+  },
+  {
+    "objectID": "index.html#adaptive-filters",
+    "href": "index.html#adaptive-filters",
+    "title": "Introducing Adaptive Filters",
+    "section": "Adaptive Filters",
+    "text": "Adaptive Filters\nThese new adaptive filters from this package change updates the values of the inputs so it “adapts” to all the filtering that is done to your data while keeping the results for values you have already selected. This can provide a better user experience when interactively exploring data.\n\nInstalling and Usage\nYou can give the new components a try by installing the package from PyPI.\npip install shiny_adaptive_filter\nTo use the components you will need to import the shiny module\nimport shiny_adaptive_filter as saf\nThe package is a shiny module, so the main usage will be similar to other shiny modules\n\n\n\n\n\n\nNote\n\n\n\nA “shiny module” is not the same as a “python module”. To learn more about shiny modules see this page from the Shiny documentation: https://shiny.posit.co/py/docs/modules.html\n\n\nYou place the UI where you want with the ui module and a module ID, and then then pass the same module ID into the server module. The server module also needs the dataframe to filter.\n# in the UI\nsaf.filter_ui(\"adaptive\")  # filter UIs from the module\n# in the server function\nadaptive_filters = adaptive_filter_module.filter_server(\n    \"adaptive\",  # name of the module id\n    df=tips,  # dataframe (can also be a reactive)\n)\nThe module returns a few things, the most important of which is an index of values, \"filter_idx\", that the application author can use to filter their data in a @reactive.calc.\nadaptive_filters_idx = adaptive_filters[\"filter_idx\"]\nYou can now use the adaptive_filters_idx() reactive calc in the rest of your application to filter the data from the adaptive filters. In the application example below, now try selecting Fri and Lunch. You will notice the Lunch option disappear when Fri is selected, since the combination of the values is not valid.\n\n#| '!! shinylive warning !!': |\n#|   shinylive does not work in self-contained HTML documents.\n#|   Please set `embed-resources: false` in your metadata.\n#| standalone: true\n#| components: [editor, viewer]\n#| viewerHeight: 700\n\nimport pandas as pd\nfrom shiny import App, render, reactive, ui\n\nimport shiny_adaptive_filter as saf\n\ndata = {\n    \"total_bill\": [16.99, 10.34, 21.01, 23.68, 24.59],\n    \"tip\": [1.01, 1.66, 3.50, 3.31, 3.61],\n    \"sex\": [\"Female\", \"Male\", \"Male\", \"Male\", \"Female\"],\n    \"smoker\": [\"No\", \"No\", \"No\", \"No\", \"Yes\"],\n    \"day\": [\"Sun\", \"Sun\", \"Sun\", \"Fri\", \"Sun\"],\n    \"time\": [\"Lunch\", \"Dinner\", \"Dinner\", \"Dinner\", \"Dinner\"],\n    \"size\": [2, 3, 3, 2, 4],\n}\n\ntips = pd.DataFrame(data)\n\napp_ui = ui.page_sidebar(\n    ui.sidebar(\n        saf.filter_ui(\"adaptive\"),  \n    ),\n    ui.output_data_frame(\"render_df\"),\n)\n\n\ndef server(input, output, session):\n    @reactive.calc\n    def data_filtered():\n        df = tips.loc[filter_idx()]  \n        return df\n\n    @render.data_frame\n    def render_df():\n        return render.DataGrid(data_filtered())\n\n    filter_return = saf.filter_server(  \n        \"adaptive\",  \n        df=tips,  \n    )  \n\n    filter_idx = filter_return[\"filter_idx\"]  \n\n\napp = App(app_ui, server)\n\n\n## file: requirements.txt\nshiny_adaptive_filter\n\n\n\n\n\n\n\nNote\n\n\n\nshiny_adaptive_filter tries to pick a reasonable default component for you based on the data type and number of unique values. In this example, the total_bill and tip columns are selectize components because our example dataframe only has 5 rows of data. Normally these would be slider objects. We will talk about manual overrides next.\n\n\n\nOverrides\nBy default, the module will try to create an adaptive filter for all the columns in your data. It tries to make sensible defaults for the kind of component you want. However, you can change (i.e., override) any of the default behaviors.\nThere are 3 (3) kinds of overrides you can provide.\n\nDisable a filter\nChange the filter type\nChange the filter label\n\nWe do this by creating a python dictionary where keys are the column names of the incoming dataframe that we want to target.\nWe can turn “off” a filter by passing in None as the value. To change the filter type, we can pass in the filter constructor. If you want to change the filter label, pass in a string of the new label.\noverride = {\n    \"total_bill\": None, # disable the total_bill column\n    \"tip\": saf.FilterNumNumericRange(), # use a different default filter\n    \"day\": \"Day of Week\", # set custom component label\n    \"size\": saf.FilterCatNumericCheckbox(label=\"Party Size\"), # set component and label\n}\n\n#| '!! shinylive warning !!': |\n#|   shinylive does not work in self-contained HTML documents.\n#|   Please set `embed-resources: false` in your metadata.\n#| standalone: true\n#| components: [editor, viewer]\n#| viewerHeight: 700\n\nimport pandas as pd\nfrom shiny import App, render, reactive, ui\n\nimport shiny_adaptive_filter as saf\n\napp_ui = ui.page_sidebar(\n    ui.sidebar(\n        saf.filter_ui(\"adaptive\"),\n    ),\n    ui.output_data_frame(\"render_df\"),\n)\n\n\ndef server(input, output, session):\n    @reactive.calc\n    def data_filtered():\n        df = tips.loc[filter_idx()]\n        return df\n\n    @render.data_frame\n    def render_df():\n        return render.DataGrid(data_filtered())\n\n    override = {  \n        \"total_bill\": None,  \n        \"tip\": saf.FilterNumNumericRange(),  \n        \"day\": \"Day of Week\",  \n        \"size\": saf.FilterCatNumericCheckbox(label=\"Party Size\"),\n    }  \n\n    filter_return = saf.filter_server(\n        \"adaptive\",\n        df=tips,\n        override=override,\n    )\n    filter_idx = filter_return[\"filter_idx\"]\n\n\ndata = {\n    \"total_bill\": [16.99, 10.34, 21.01, 23.68, 24.59],\n    \"tip\": [1.01, 1.66, 3.50, 3.31, 3.61],\n    \"sex\": [\"Female\", \"Male\", \"Male\", \"Male\", \"Female\"],\n    \"smoker\": [\"No\", \"No\", \"No\", \"No\", \"Yes\"],\n    \"day\": [\"Sun\", \"Sun\", \"Sun\", \"Fri\", \"Sun\"],\n    \"time\": [\"Lunch\", \"Dinner\", \"Dinner\", \"Dinner\", \"Dinner\"],\n    \"size\": [2, 3, 3, 2, 4],\n}\n\ntips = pd.DataFrame(data)\n\napp = App(app_ui, server)\n\n\n## file: requirements.txt\nshiny_adaptive_filter&gt;=0.0.1.9004\n\n\n\nReset\nThis shiny module also returns a reset ability that removes all the selected options from all the adaptive filters. You can access it with the \"reset_all\" key.\nadaptive_filters = adaptive_filter_module.filter_server(\n    \"adaptive\", df=tips_original\n)\n\nadaptive_reset_all = adaptive_filters[\"reset_all\"]\nYou can then use the adaptive_reset_all() to clear all the selections from the adaptive filters, typically this will be attached to a button that triggers an reactive event.\n# in the UI\nui.input_action_button(\"reset\", \"Reset filters\")\n# in the server function\n@reactive.effect\n@reactive.event(input.reset)\ndef _():\n    adaptive_reset_all()\nThis way you have the flexibility to incorporate resetting the adaptive filters along with any other behavior in the shiny application\n\n#| '!! shinylive warning !!': |\n#|   shinylive does not work in self-contained HTML documents.\n#|   Please set `embed-resources: false` in your metadata.\n#| standalone: true\n#| components: [editor, viewer]\n#| viewerHeight: 700\n\nimport pandas as pd\nfrom shiny import App, render, reactive, ui\n\nimport shiny_adaptive_filter as saf\n\napp_ui = ui.page_sidebar(\n    ui.sidebar(\n        ui.input_action_button(\"reset\", \"Reset filters\"),  \n        saf.filter_ui(\"adaptive\"),\n    ),\n    ui.output_data_frame(\"render_df\"),\n)\n\n\ndef server(input, output, session):\n    @reactive.calc\n    def data_filtered():\n        df = tips.loc[filter_idx()]\n        return df\n\n    @render.data_frame\n    def render_df():\n        return render.DataGrid(data_filtered())\n\n    @reactive.effect  \n    @reactive.event(input.reset)  \n    def _():  \n        adaptive_reset_all()  \n\n    override = {\n        \"total_bill\": saf.FilterNumNumericRange(),\n        \"tip\": saf.FilterNumNumericRange(),\n    }\n\n    filter_return = saf.filter_server(\n        \"adaptive\",\n        df=tips,\n        override=override,\n    )\n    filter_idx = filter_return[\"filter_idx\"]\n    adaptive_reset_all = filter_return[\"reset_all\"]  \n\n\ndata = {\n    \"total_bill\": [16.99, 10.34, 21.01, 23.68, 24.59],\n    \"tip\": [1.01, 1.66, 3.50, 3.31, 3.61],\n    \"sex\": [\"Female\", \"Male\", \"Male\", \"Male\", \"Female\"],\n    \"smoker\": [\"No\", \"No\", \"No\", \"No\", \"Yes\"],\n    \"day\": [\"Sun\", \"Sun\", \"Sun\", \"Fri\", \"Sun\"],\n    \"time\": [\"Lunch\", \"Dinner\", \"Dinner\", \"Dinner\", \"Dinner\"],\n    \"size\": [2, 3, 3, 2, 4],\n}\n\ntips = pd.DataFrame(data)\n\napp = App(app_ui, server)\n\n\n## file: requirements.txt\nshiny_adaptive_filter&gt;=0.0.1.9004"
+  },
+  {
+    "objectID": "index.html#summary",
+    "href": "index.html#summary",
+    "title": "Introducing Adaptive Filters",
+    "section": "Summary",
+    "text": "Summary\nshiny_adaptive_filters is a solution for having data frame filter components “adapt” to the filters set by other components. It allows users to select valid rows of data as they are subsetting their data, and provides a visual cue for invalid data filtering combinations.\nThis package hopes to make your next Shiny for Python data application a bit more user friendly. We have a few improvements and next iterations in mind already, but give the package module a try and let us know what works and doesn’t work for you."
+  },
+  {
+    "objectID": "reference/FilterCatStringSelect.html",
+    "href": "reference/FilterCatStringSelect.html",
+    "title": "FilterCatStringSelect",
+    "section": "",
+    "text": "FilterCatStringSelect(self, *, label=None)\n\n\n\n\n\nName\nDescription\n\n\n\n\nmatching_rows\nCalculates the rows that match the current filter\n\n\nnarrow_options\nUpdates the current filter values based on the values from other filters.\n\n\n\n\n\nFilterCatStringSelect.matching_rows()\nCalculates the rows that match the current filter and returns an Index of the .matching rows\n\n\n\nFilterCatStringSelect.narrow_options(valid_rows)\nUpdates the current filter values based on the values from other filters. This only does the component update, it does not perform the calculations needed to figure out what",
+    "crumbs": [
+      "Reference",
+      "Adaptive Filters",
+      "FilterCatStringSelect"
+    ]
+  },
+  {
+    "objectID": "reference/FilterCatStringSelect.html#methods",
+    "href": "reference/FilterCatStringSelect.html#methods",
+    "title": "FilterCatStringSelect",
+    "section": "",
+    "text": "Name\nDescription\n\n\n\n\nmatching_rows\nCalculates the rows that match the current filter\n\n\nnarrow_options\nUpdates the current filter values based on the values from other filters.\n\n\n\n\n\nFilterCatStringSelect.matching_rows()\nCalculates the rows that match the current filter and returns an Index of the .matching rows\n\n\n\nFilterCatStringSelect.narrow_options(valid_rows)\nUpdates the current filter values based on the values from other filters. This only does the component update, it does not perform the calculations needed to figure out what",
+    "crumbs": [
+      "Reference",
+      "Adaptive Filters",
+      "FilterCatStringSelect"
+    ]
+  },
+  {
+    "objectID": "reference/FilterCatNumericCheckbox.html",
+    "href": "reference/FilterCatNumericCheckbox.html",
+    "title": "FilterCatNumericCheckbox",
+    "section": "",
+    "text": "FilterCatNumericCheckbox\nFilterCatNumericCheckbox(self, *, label=None)\nCreates a checkbox filter on a categorical numeric value\nThis is really similar to the FilterCatStringCheckbox, it returns a checkbox, but works when we need to do comparisons as if the values are both numeric",
+    "crumbs": [
+      "Reference",
+      "Adaptive Filters",
+      "FilterCatNumericCheckbox"
+    ]
+  },
+  {
+    "objectID": "reference/index.html",
+    "href": "reference/index.html",
+    "title": "Function reference",
+    "section": "",
+    "text": "Shiny Module objects\n\n\n\nfilter_ui\nAdaptive Filter UI\n\n\nfilter_server\nAdaptive Filter serve function\n\n\n\n\n\n\nIndividual components that adapt to one another\n\n\n\nBaseFilter\n\n\n\nFilterCatStringSelect\n\n\n\nFilterCatNumericSelect\nCreates a selectize filter on a numeric column\n\n\nFilterNumNumericRange\nCreates a range filter on a numeric column\n\n\nFilterCatStringCheckbox\nCreates a checkbox filter on a categorical string\n\n\nFilterCatNumericCheckbox\nCreates a checkbox filter on a categorical numeric value",
+    "crumbs": [
+      "Reference",
+      "Function reference"
+    ]
+  },
+  {
+    "objectID": "reference/index.html#shiny-module-ui-and-server",
+    "href": "reference/index.html#shiny-module-ui-and-server",
+    "title": "Function reference",
+    "section": "",
+    "text": "Shiny Module objects\n\n\n\nfilter_ui\nAdaptive Filter UI\n\n\nfilter_server\nAdaptive Filter serve function",
+    "crumbs": [
+      "Reference",
+      "Function reference"
+    ]
+  },
+  {
+    "objectID": "reference/index.html#adaptive-filters",
+    "href": "reference/index.html#adaptive-filters",
+    "title": "Function reference",
+    "section": "",
+    "text": "Individual components that adapt to one another\n\n\n\nBaseFilter\n\n\n\nFilterCatStringSelect\n\n\n\nFilterCatNumericSelect\nCreates a selectize filter on a numeric column\n\n\nFilterNumNumericRange\nCreates a range filter on a numeric column\n\n\nFilterCatStringCheckbox\nCreates a checkbox filter on a categorical string\n\n\nFilterCatNumericCheckbox\nCreates a checkbox filter on a categorical numeric value",
+    "crumbs": [
+      "Reference",
+      "Function reference"
+    ]
+  },
+  {
+    "objectID": "reference/FilterCatNumericSelect.html",
+    "href": "reference/FilterCatNumericSelect.html",
+    "title": "FilterCatNumericSelect",
+    "section": "",
+    "text": "FilterCatNumericSelect\nFilterCatNumericSelect(self, *, label=None)\nCreates a selectize filter on a numeric column\nDealing with numeric categorical data means that we need to do a few things: 1. convert the selectize values into a numeric 2. then use the numeric to sort the options\nAs a selectize component, we can use the .isin() method to test for values",
+    "crumbs": [
+      "Reference",
+      "Adaptive Filters",
+      "FilterCatNumericSelect"
+    ]
+  }
+]

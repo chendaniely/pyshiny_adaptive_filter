@@ -1,0 +1,23 @@
+# Function reference {.doc .doc-index}
+
+## Shiny Module UI and Server
+
+Shiny Module objects
+
+| | |
+| --- | --- |
+| [filter_ui](filter_ui.qmd#shiny_adaptive_filter.filter_ui) | Adaptive Filter UI |
+| [filter_server](filter_server.qmd#shiny_adaptive_filter.filter_server) | Adaptive Filter serve function |
+
+## Adaptive Filters
+
+Individual components that adapt to one another
+
+| | |
+| --- | --- |
+| [BaseFilter](BaseFilter.qmd#shiny_adaptive_filter.BaseFilter) |  |
+| [FilterCatStringSelect](FilterCatStringSelect.qmd#shiny_adaptive_filter.FilterCatStringSelect) |  |
+| [FilterCatNumericSelect](FilterCatNumericSelect.qmd#shiny_adaptive_filter.FilterCatNumericSelect) | Creates a selectize filter on a numeric column |
+| [FilterNumNumericRange](FilterNumNumericRange.qmd#shiny_adaptive_filter.FilterNumNumericRange) | Creates a range filter on a numeric column |
+| [FilterCatStringCheckbox](FilterCatStringCheckbox.qmd#shiny_adaptive_filter.FilterCatStringCheckbox) | Creates a checkbox filter on a categorical string |
+| [FilterCatNumericCheckbox](FilterCatNumericCheckbox.qmd#shiny_adaptive_filter.FilterCatNumericCheckbox) | Creates a checkbox filter on a categorical numeric value |

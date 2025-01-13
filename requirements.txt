@@ -1,6 +1,7 @@
 ipykernel
 shiny
 pandas
+jupyter
 
 # examples
 faicons
@@ -9,8 +10,12 @@ shinywidgets
 plotly
 pandas
 ridgeplot
+shinylive
 
 # test
 playwright
 pytest
 pytest-playwright
+
+# build
+quartodoc

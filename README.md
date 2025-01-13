@@ -36,3 +36,10 @@ Need to install playwright browsers after new environment setup
 ```bash
 playwright install
 ```
+
+### quartodoc
+
+```bash
+quarto add quarto-ext/shinylive
+quarto add shafayetShafee/line-highlight
+```

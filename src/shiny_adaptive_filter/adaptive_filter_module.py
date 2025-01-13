@@ -19,16 +19,32 @@ class FilterServerResults(TypedDict):
     reset_all: Callable[[], None]
 
 
-@module.ui
-def filter_ui():
-    return ui.output_ui("render_all_filters")
-
-
 def ensure_func(value_or_func: T | Callable[[], T]) -> Callable[[], T]:
+    """Helper function for the server function so the module can take
+    both a reactive dataframe or regular dataframe object.
+    """
     if callable(value_or_func):
         return cast(Callable[[], T], value_or_func)
     else:
         return lambda: value_or_func
+
+
+
+@module.ui
+def filter_ui():
+    """Adaptive Filter UI
+
+    By default, the adaptive filter module will insert a best guess component
+    for each of the columns in the dataset.
+    You can override the default component and/or label by passing the module's
+    server an override argument.
+
+    Returns
+    -------
+    _type_
+        _description_
+    """
+    return ui.output_ui("render_all_filters")
 
 
 @module.server
@@ -37,12 +53,29 @@ def filter_server(
     output: Outputs,
     session: Session,
     df: Callable[[], pd.DataFrame] | pd.DataFrame,
-    reset_id: str | None = None,
+    #reset_id: str | None = None,
     override: Dict[str, Union[adaptive_filter.BaseFilter, str, None]] = {},
 ) -> FilterServerResults:
-    #
-    # begin server functions
-    #
+    """Adaptive Filter serve function
+
+    All the reactive caluclations, ui, etc for the adaptive filter component.
+
+    Parameters
+    ----------
+    intput: server inputs
+    output: server output
+    session: app session
+    df: a dataframe for the adaptive filters, can be a reactive calc or pandas dataframe
+    reset_id:
+    override: dictionary of manual override values for adaptive filters
+
+    Returns
+    -------
+    FilterServerResults
+        A dictionary containing the the final index values for the filtered dataframe,
+        each adaptive filter,
+        and a callable that can eset the adaptive filters
+    """
 
     df = ensure_func(df)
 
@@ -122,9 +155,9 @@ def filter_server(
         return filters_by_colname
 
     @reactive.calc
-    def col_idx_intersection_others() -> (
-        List[helpers.OtherColumnFilterIndexData]
-    ):
+    def col_idx_intersection_others() -> List[
+        helpers.OtherColumnFilterIndexData
+    ]:
         # these create a OtherColumnFilterIndexData data object
         col_fi_oi_data = helpers.create_other_column_filter_index_data(
             col_filter_idx(),

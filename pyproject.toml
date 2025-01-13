@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "shiny_adaptive_filter"
-version = "0.0.1.9003"
+version = "0.0.1.9004"
 description = 'Shiny for Python module that implments UI components that are aware and adapts to other component selections.'
 readme = "README.md"
 requires-python = ">=3.10"
@@ -26,7 +26,18 @@ classifiers = [
 dependencies = ["pandas", "shiny"]
 
 [project.optional-dependencies]
-tests = ["pytest", "pytest-cov", "nox", "playwright", "pytest-playwright"]
+tests = [
+  "pytest",
+  "pytest-cov",
+  "nox",
+  "playwright",
+  "pytest-playwright",
+  "faicons",
+  "shinywidgets",
+  "plotlt",
+  "ridgeplot",
+  "quartodoc",
+]
 
 [project.urls]
 Documentation = "https://github.com/chendaniely/pyshiny_adaptive_filter#readme"

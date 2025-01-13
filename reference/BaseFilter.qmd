@@ -1,0 +1,6 @@
+# BaseFilter { #shiny_adaptive_filter.BaseFilter }
+
+```python
+BaseFilter(self, *, label=None)
+```
+

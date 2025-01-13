@@ -1,0 +1,11 @@
+# FilterCatStringCheckbox { #shiny_adaptive_filter.FilterCatStringCheckbox }
+
+```python
+FilterCatStringCheckbox(self, *, label=None)
+```
+
+Creates a checkbox filter on a categorical string
+
+This is really similar to the FilterCatStringSelect
+except it returns a checkbox instead of a selectize UI.
+Useful for columns with not as many options to pick from

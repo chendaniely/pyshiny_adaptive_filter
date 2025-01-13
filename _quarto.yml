@@ -1,0 +1,48 @@
+project:
+  type: website
+  output-dir: docs
+
+
+# tell quarto to read the generated sidebar
+metadata-files:
+  - _sidebar.yml
+
+website:
+  navbar:
+    background: primary
+    search: true
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "Reference"
+        href: reference/index.qmd
+
+quartodoc:
+  # the name used to import the package you want to create reference docs for
+  package: shiny_adaptive_filter
+
+  # write sidebar data to this file
+  sidebar: _sidebar.yml
+
+  sections:
+    - title: Shiny Module UI and Server
+      desc: Shiny Module objects
+      contents:
+        # the functions being documented in the package.
+        # you can refer to anything: class methods, modules, etc..
+        - filter_ui
+        - filter_server
+    - title: Adaptive Filters
+      desc: Individual components that adapt to one another
+      contents:
+        - BaseFilter
+        - FilterCatStringSelect
+        - FilterCatNumericSelect
+        - FilterNumNumericRange
+        - FilterCatStringCheckbox
+        - FilterCatNumericCheckbox
+
+filters:
+  - shinylive
+  - quarto
+  - line-highlight

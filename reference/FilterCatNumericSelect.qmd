@@ -1,0 +1,13 @@
+# FilterCatNumericSelect { #shiny_adaptive_filter.FilterCatNumericSelect }
+
+```python
+FilterCatNumericSelect(self, *, label=None)
+```
+
+Creates a selectize filter on a numeric column
+
+Dealing with numeric categorical data means that we need to do a few things:
+1. convert the selectize values into a numeric
+2. then use the numeric to sort the options
+
+As a selectize component, we can use the .isin() method to test for values

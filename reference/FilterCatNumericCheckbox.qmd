@@ -1,0 +1,11 @@
+# FilterCatNumericCheckbox { #shiny_adaptive_filter.FilterCatNumericCheckbox }
+
+```python
+FilterCatNumericCheckbox(self, *, label=None)
+```
+
+Creates a checkbox filter on a categorical numeric value
+
+This is really similar to the FilterCatStringCheckbox,
+it returns a checkbox, but works when we need to do comparisons
+as if the values are both numeric

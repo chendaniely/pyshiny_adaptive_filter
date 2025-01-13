@@ -1,0 +1,18 @@
+website:
+  sidebar:
+  - contents:
+    - reference/index.qmd
+    - contents:
+      - reference/filter_ui.qmd
+      - reference/filter_server.qmd
+      section: Shiny Module UI and Server
+    - contents:
+      - reference/BaseFilter.qmd
+      - reference/FilterCatStringSelect.qmd
+      - reference/FilterCatNumericSelect.qmd
+      - reference/FilterNumNumericRange.qmd
+      - reference/FilterCatStringCheckbox.qmd
+      - reference/FilterCatNumericCheckbox.qmd
+      section: Adaptive Filters
+    id: reference
+  - id: dummy-sidebar

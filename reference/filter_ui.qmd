@@ -1,0 +1,18 @@
+# filter_ui { #shiny_adaptive_filter.filter_ui }
+
+```python
+filter_ui()
+```
+
+Adaptive Filter UI
+
+By default, the adaptive filter module will insert a best guess component
+for each of the columns in the dataset.
+You can override the default component and/or label by passing the module's
+server an override argument.
+
+## Returns {.doc-section .doc-section-returns}
+
+| Name   | Type   | Description   |
+|--------|--------|---------------|
+|        | _type_ | _description_ |

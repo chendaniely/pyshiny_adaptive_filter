@@ -1,0 +1,17 @@
+# FilterNumNumericRange { #shiny_adaptive_filter.FilterNumNumericRange }
+
+```python
+FilterNumNumericRange(self, *, label=None)
+```
+
+Creates a range filter on a numeric column
+
+Dealing with numeric ranges data means that we need to do a few things:
+1. find the start and and of the range
+2. use the .between() method to check for values between the ranges
+3. we are using inclusive = both as a hard-coded default
+
+As a range component, we can use the .between() method to test for values.
+
+a range or value slider both use ui.input_slider(), the only difference
+is input slider ranges are given 2 values for the value parameter
